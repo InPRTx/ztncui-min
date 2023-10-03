@@ -22,8 +22,6 @@ MAINTAINER='https://key-networks.com/contact'
 URL='https://key-networks.com'
 LICENSE='GPLv3'
 
-BINDINGGYP='node_modules/argon2/binding.gyp'
-
 NODE_VER='v16'
 
 if [ ! -f /usr/lib/gcc/x86_64-redhat-linux/8/libstdc++fs.a ]; then
@@ -57,22 +55,6 @@ fi
 
 npm install
 
-patch --forward --dry-run --silent $BINDINGGYP $BUILD_DIR/binding.gyp.patch
-if [ $? -eq 0 ]; then
-  echo "Applying patch to $BINDINGGYP..."
-  patch --forward $BINDINGGYP $BUILD_DIR/binding.gyp.patch
-fi
-if [ $? -ne 0 ]; then
-  echo "Failed to patch $BINDINGGYP"
-  exit 1
-fi
-
-cd node_modules/argon2/
-node-gyp rebuild
-if [ $? -ne 0 ]; then
-  echo "Failed to rebuild argon2"
-  exit 1
-fi
 
 popd
 pkg -c ./package.json -t node16-linux-x64 bin/www -o $BUILD_DIR/ztncui

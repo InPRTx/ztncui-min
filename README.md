@@ -20,12 +20,7 @@ Relative directory references below are relative to the cloned ztncui directory.
 ### Prerequisites
 * ztncui is a [node.js](https://nodejs.org) [Express](https://expressjs.com) application that requires [node.js](https://nodejs.org) v14.
 
-* ztncui uses argon2 for password hashing. Argon2 needs the following:
-  1. g++
-  2. node-gyp, which can be installed with:
-```shell
-sudo npm install -g node-gyp
-```
+* ztncui uses uuid5 for password hashing.
 
 * ztncui requires [ZeroTier One](https://www.zerotier.com/download.shtml) to be installed on the same machine.  This will run as the network controller to establish ZeroTier networks.
 
