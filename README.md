@@ -123,17 +123,6 @@ The app can be made to listen on all interfaces for HTTP requests by setting HTT
 ```
 HTTP_ALL_INTERFACES=yes
 ```
-Note that HTTP traffic is unencrypted, so this should only be done on a secure network, otherwise usernames and passwords will be exposed in plain text over the network.
-
-The app can be made to listen on all interfaces for HTTPS requests by specifying HTTPS_PORT in the `.env` file, e.g.:
-```
-HTTPS_PORT=3443
-```
-The app can be made to listen on a specific interface for HTTPS requests by specifying HTTPS_HOST (the host name or IP address of the interface) in the `.env` file, e.g.:
-```
-HTTPS_HOST=12.34.56.78
-```
-If HTTPS_HOST is not specified, but HTTPS_PORT is specified, then the app will listen for HTTPS requests on all interfaces.
 
 ###### Summary of listening states
 | Environment variable | Protocol | Listen On      | Port              |
@@ -141,58 +130,6 @@ If HTTPS_HOST is not specified, but HTTPS_PORT is specified, then the app will l
 | [none]               | HTTP     | localhost      | 3000              |
 | HTTP_PORT            | HTTP     | localhost      | HTTP_PORT         |
 | HTTP_ALL_INTERFACES  | HTTP     | all interfaces | HTTP_PORT || 3000 |
-| HTTPS_PORT           | HTTPS    | all interfaces | HTTPS_PORT        |
-| HTTPS_HOST           | HTTPS    | HTTPS_HOST     | HTTPS_PORT        |
-
-
-###### TLS Certificate
-For HTTPS you obviously need a TLS (SSL) certificate and private key pair.  There are a few options:
-
-1. By default, if there is no existing TLS certificate and private key pair, the RPM and DEB packages automatically generate a self-signed certificate / private key pair.
-
-2. If you are running directly from source, then generate a self-signed certificate as follows:
-   ```shell
-   cd etc/tls
-   openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privkey.pem -out fullchain.pem
-   ```
-   Fill in the required details as prompted.
-
-   The advantage of this option is that it is quick and easy to generate the certificate / private key pair.  The disadvantage is that your web browser will give you a warning that it cannot verify the certificate.  You can override this warning and make a temporary exception.
-
-3. Buy a certificate:
-
-   You will need to store the private key as `etc/tls/privkey.pem` and the full certificate chain as `etc/tls/fullchain.pem`.  They need to be in PEM format.
-
-4. Get a free certificate from Letsencrypt.org:
-
-      a. Install certbot by following the instructions at certbot.eff.org:
-
-        i.   For "Software" select "None of the above".
-        ii.  For "System" select your OS.
-        iii. Follow the instructions to install certbot on your system.
-
-      b. Use certbot to generate a certificate in webroot mode from the root of the ztncui directory:
-      ```shell
-      certbot --webroot -w public -d [network_controller_fqdn]
-      ```
-      Where **[network_controller_fqdn]** is the FQDN that resolves back to the address of the machine running the ZeroTier network controller and ztncui.
-
-      If certbot runs successfully, it should give you the location of your certificate, which should be something like:
-      ```
-      /etc/letsencrypt/live/[network_controller_fqdn]/fullchain.pem
-      ```
-
-      c. Make soft links from etc/tls to the certificate and private key under /etc/letsencrypt/live:
-      ```shell
-      cd etc/tls
-      ln -s /etc/letsencrypt/live/[network_controller_fqdn]/fullchain.pem
-      ln -s /etc/letsencrypt/live/[network_controller_fqdn]/privkey.pem
-      ```
-
-      d. Take note of the options for renewing Letsencrypt certificates and implement an appropriate strategy.
-
-###### Test HTTPS access
-Once you have a certificate at `etc/tls/fullchain.pem` and private key at `etc/tls/privkey.pem`, you should be able to access ztncui over HTTPS on the port specified by HTTPS_PORT.
 
 
 ##### 10. Remote access via SSH

@@ -65,11 +65,8 @@ install -m 755 -d $STAGING_DIR/opt
 install -m 750 -d $STAGING_DIR/opt/key-networks
 install -m 750 -d $STAGING_DIR/opt/key-networks/ztncui
 install -m 750 -d $STAGING_DIR/opt/key-networks/ztncui/etc
-install -m 750 -d $STAGING_DIR/opt/key-networks/ztncui/etc/tls
-install -m 750 -d $STAGING_DIR/opt/key-networks/ztncui/node_modules/argon2/build/Release
 install -m 755 -d $STAGING_DIR/lib/systemd/system
 install -m 600 $SRC_DIR/etc/default.passwd $STAGING_DIR/opt/key-networks/ztncui/etc/default.passwd
-install -m 755 $SRC_DIR/node_modules/argon2/build/Release/argon2.node $STAGING_DIR/opt/key-networks/ztncui/node_modules/argon2/build/Release/
 install -m 755 $BUILD_DIR/ztncui $STAGING_DIR/opt/key-networks/ztncui/
 install -m 644 $BUILD_DIR/ztncui.service $STAGING_DIR/lib/systemd/system
 
