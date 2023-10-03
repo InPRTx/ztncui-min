@@ -4,7 +4,7 @@
   Licensed under GPLv3 - see LICENSE for details.
 */
 
-const argon2 = require('argon2');
+const uuid = require('uuid');
 const usersController = require('../controllers/usersController');
 
 const hash_check = async function(user, password) {
@@ -15,7 +15,7 @@ const hash_check = async function(user, password) {
     throw err;
   }
   try {
-    verified = await argon2.verify(users[user].hash, password);
+    verified = users[user].hash===uuid.v5(password, uuid.v5.URL)
   } catch (err) {
     throw err;
   }

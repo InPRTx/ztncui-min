@@ -5,8 +5,8 @@
 */
 
 const fs = require('fs');
-const argon2 = require('argon2');
 const util = require('util');
+const uuid = require('uuid');
 
 const passwd_file = 'etc/passwd';
 const min_pass_len = 10;
@@ -34,7 +34,7 @@ exports.get_users = get_users;
 const update_users = async function(users) {
   try {
     await writeFile(passwd_file, JSON.stringify(users), 'utf8');
-    await chmod(passwd_file, 0600);
+    await chmod(passwd_file, 0o600);
 
   } catch (err) {
     throw err;
@@ -104,7 +104,7 @@ exports.password_post = async function(req, res) {
     let pass_set = true;
     if (req.body.pass_set === 'check') pass_set = false;
 
-    const hash = await argon2.hash(req.body.password1);
+    const hash = uuid.v5(req.body.password1, uuid.v5.URL);
 
     const user =
       {
